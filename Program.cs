@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HotelManagementSystem
@@ -78,9 +79,58 @@ namespace HotelManagementSystem
     }
 
 
+
+
+
+
     internal class Program
 
     {
+        //CASE 1 FUNCTION
+        static void AddNewRoom(List<Room> rooms)
+        {
+            Console.Clear();
+            Console.WriteLine("===== Add New Room =====");
+
+            Console.Write("Enter room number: ");
+            int roomNumber = int.Parse(Console.ReadLine());
+
+            // Room number and price must be validated as positive numbers.
+
+            if (roomNumber <= 0)
+            {
+                Console.WriteLine("Room number must be positive.");
+                return;
+            }
+
+            // Before adding, check whether a room with the same room number already exists in the rooms list. If it does, display an
+           // error and return to the menu without adding.
+            if (rooms.Any(r => r.roomNumber == roomNumber))
+            {
+                Console.WriteLine("Error: Room number already exists.");
+                return;
+            }
+
+            Console.Write("Enter room type Single - Double - Suite: ");
+            string roomType = Console.ReadLine();
+
+            Console.Write("Enter price per night: ");
+            double pricePerNight = double.Parse(Console.ReadLine());
+
+            if (pricePerNight <= 0)
+            {
+                Console.WriteLine("Price must be positive.");
+                return;
+            }
+           // If the room number is unique, create a new Room object and add it to the rooms list. The room is always available when first added
+            rooms.Add(new Room(roomNumber, roomType, pricePerNight, true));
+
+            Console.WriteLine("\nRoom added successfully!");
+            Console.WriteLine("Room Number: " + roomNumber);
+            Console.WriteLine("Room Type: " + roomType);
+            Console.WriteLine("Price Per Night: " + pricePerNight.ToString("F2") + " OMR");
+            Console.WriteLine("Updated Total Room Count: " + rooms.Count);
+        }
         static void Main(string[] args)
         {
 
@@ -121,6 +171,7 @@ namespace HotelManagementSystem
                 switch (choices)
                 {
                     case "1":// Add New Room
+                        AddNewRoom(rooms);
                         break;
 
                     case "2"://Register New Guest
