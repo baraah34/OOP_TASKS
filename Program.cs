@@ -61,7 +61,7 @@ namespace HotelManagementSystem
             Console.WriteLine("Total Nights: " + totalNights);
         }
 
-        public double calculateTotalCost(List<Room> rooms)//THE METHIOD RECEIVE THE LIST OF HOTEL ROOM
+        public double calculateCost(List<Room> rooms)//THE METHIOD RECEIVE THE LIST OF HOTEL ROOM
         {
             //SEARCH INSIDE THE ROOM LIST TO FIND THE ROOM BOOKED BY  GUEST
 
@@ -83,6 +83,19 @@ namespace HotelManagementSystem
     {
         static void Main(string[] args)
         {
+
+            List<Room> rooms = new List<Room>();
+
+            List<Guest> guests = new List<Guest>();
+
+            rooms.Add(new Room(111, "Single", 26.00, true));
+            rooms.Add(new Room(112, "Double", 42.00, true));
+            rooms.Add(new Room(113, "Suite", 88.00, true));
+            rooms.Add(new Room(114, "Single", 35.00, true));
+            rooms.Add(new Room(115, "Double", 50.00, true));
+            rooms.Add(new Room(116, "Suite", 150.00, true));
+
+
             bool choice = true;
 
             while (choice)
