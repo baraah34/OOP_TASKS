@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Xml;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -122,8 +124,9 @@ namespace HotelManagementSystem
                 Console.WriteLine("Price must be positive.");
                 return;
             }
-           // If the room number is unique, create a new Room object and add it to the rooms list. The room is always available when first added
-            rooms.Add(new Room(roomNumber, roomType, pricePerNight, true));
+            // If the room number is unique, create a new Room object and add it to the rooms list. The room is always available when first added
+          Room AddNewRoom = new Room(roomNumber, roomType, pricePerNight, true);
+            rooms.Add(AddNewRoom);
 
             Console.WriteLine("\nRoom added successfully!");
             Console.WriteLine("Room Number: " + roomNumber);
@@ -131,6 +134,53 @@ namespace HotelManagementSystem
             Console.WriteLine("Price Per Night: " + pricePerNight.ToString("F2") + " OMR");
             Console.WriteLine("Updated Total Room Count: " + rooms.Count);
         }
+
+        //CASE 2
+
+        static void RegisterNewGuest(List<Guest> guests)
+        {
+            Console.Clear();
+            Console.WriteLine("===== Register New Guest =====");
+
+            Console.Write("Enter guest name: ");
+            string guestName = Console.ReadLine();
+
+            Console.Write("Enter check-in date: ");
+            string checkInDate = Console.ReadLine();
+
+            Console.Write("Enter number of nights: ");
+            int totalNights = int.Parse(Console.ReadLine());
+
+            // Number of nights must be validated as a positive integer:
+
+            if (totalNights <= 0)
+            {
+                Console.WriteLine("Number of nights must be positive.");
+                return;
+            }
+
+            //Auto - generate the guest ID from the current size of the guests list(format: G001, G002, G003...):
+
+            string guestId = "G" + (guests.Count + 1).ToString("D3");
+
+
+           // Create a new Guest object with roomNumber set to a default value of 'Not Assigned', then add it to the guests list:
+
+            Guest newGuest = new Guest(guestId, guestName, "Not Assigned", checkInDate, totalNights);
+
+
+            guests.Add(newGuest);
+
+            Console.WriteLine("\nGuest registered successfully!");
+            Console.WriteLine("Generated Guest ID: " + guestId);
+            Console.WriteLine("Guest Name: " + guestName);
+            Console.WriteLine("Room Number: Not Assigned");
+            Console.WriteLine("Check-In Date: " + checkInDate);
+            Console.WriteLine("Total Nights: " + totalNights);
+        }
+
+
+        //case 3 
         static void Main(string[] args)
         {
 
@@ -175,6 +225,7 @@ namespace HotelManagementSystem
                         break;
 
                     case "2"://Register New Guest
+                        RegisterNewGuest(guests);
                         break;
 
                     case "3"://Book a Room for a Guest
