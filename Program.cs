@@ -4,7 +4,38 @@ using System.Linq;
 
 namespace HotelManagementSystem
 {
+    //ROOM
+    class Room
+    {
+        public int roomNumber;
+        public string roomType;
+        public double pricePerNight;
+        public bool isAvailable;
+
+        // ROOM CONSTRUCTOR => give values to  object  when you create it.
+        public Room(int roomNumber, string roomType, double pricePerNight, bool isAvailable)
+        {
+            this.roomNumber = roomNumber;
+            this.roomType = roomType;
+            this.pricePerNight = pricePerNight;
+            this.isAvailable = isAvailable;
+        }
+
+        public void displayRoom()
+        {
+            Console.WriteLine("Room Number: " + roomNumber);
+            Console.WriteLine("Room Type: " + roomType);
+            Console.WriteLine("Price Per Night: " + pricePerNight.ToString("F2") + " OMR");
+            Console.WriteLine("Available: " + isAvailable);
+         
+        }
+    }
+
+
+
+
     internal class Program
+
     {
         static void Main(string[] args)
         {
