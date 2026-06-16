@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HotelManagementSystem
 {
@@ -31,7 +32,50 @@ namespace HotelManagementSystem
         }
     }
 
+    //GUEST CLASS
 
+    class Guest
+    {
+        public string guestId;
+        public string guestName;
+        public string roomNumber;
+        public string checkInDate;
+        public int totalNights;
+
+        // GUEST CONSTRUCTOR
+        public Guest(string guestId, string guestName, string roomNumber, string checkInDate, int totalNights)
+        {
+            this.guestId = guestId;
+            this.guestName = guestName;
+            this.roomNumber = roomNumber;
+            this.checkInDate = checkInDate;
+            this.totalNights = totalNights;
+        }
+
+        public void displayGuest()
+        {
+            Console.WriteLine("Guest ID: " + guestId);
+            Console.WriteLine("Guest Name: " + guestName);
+            Console.WriteLine("Room Number: " + roomNumber);
+            Console.WriteLine("Check-In Date: " + checkInDate);
+            Console.WriteLine("Total Nights: " + totalNights);
+        }
+
+        public double calculateTotalCost(List<Room> rooms)//THE METHIOD RECEIVE THE LIST OF HOTEL ROOM
+        {
+            //SEARCH INSIDE THE ROOM LIST TO FIND THE ROOM BOOKED BY  GUEST
+
+           // FOR EACH ROOM r, CHECK IF THE ROOM NUMBER EQUALES  GUEST ROOM NUMBER
+            Room room = rooms.FirstOrDefault(r => r.roomNumber.ToString() == roomNumber);  //FirstOrDefault =>FIND THE FIRST ROOM THAT MATCH THE CONDITION
+
+            if (room == null)
+            {
+                return 0;
+            }
+
+            return room.pricePerNight * totalNights;
+        }
+    }
 
 
     internal class Program
