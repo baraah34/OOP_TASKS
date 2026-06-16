@@ -181,6 +181,58 @@ namespace HotelManagementSystem
 
 
         //case 3 
+
+        static void BookRoomForGuest(List<Room> rooms, List<Guest> guests)
+        {
+            Console.Clear();
+            Console.WriteLine("===== Book a Room for a Guest =====");
+
+            Console.Write("Enter guest ID: ");
+            string guestId = Console.ReadLine();
+
+            Guest guest = guests.FirstOrDefault(g => g.guestId == guestId);
+
+            if (guest == null)
+            {
+                Console.WriteLine("Guest not found.");
+                return;
+            }
+
+            Console.Write("Enter desired room number: ");
+            int roomNumber;
+
+            if (!int.TryParse(Console.ReadLine(), out roomNumber))
+            {
+                Console.WriteLine("Invalid room number.");
+                return;
+            }
+
+            Room room = rooms.FirstOrDefault(r => r.roomNumber == roomNumber);
+
+            if (room == null)
+            {
+                Console.WriteLine("Room not found.");
+                return;
+            }
+
+            if (room.isAvailable == false)
+            {
+                Console.WriteLine("Room is already booked.");
+                return;
+            }
+
+            guest.roomNumber = room.roomNumber.ToString();
+            room.isAvailable = false;
+
+            Console.WriteLine("\nBooking confirmed!");
+            Console.WriteLine("Guest Name: " + guest.guestName);
+            Console.WriteLine("Room Number: " + room.roomNumber);
+            Console.WriteLine("Room Type: " + room.roomType);
+            Console.WriteLine("Price Per Night: " + room.pricePerNight.ToString("F2") + " OMR");
+            Console.WriteLine("Total Nights: " + guest.totalNights);
+            Console.WriteLine("Total Cost: " + guest.calculateCost(rooms).ToString("F2") + " OMR");
+        }
+
         static void Main(string[] args)
         {
 
@@ -229,6 +281,7 @@ namespace HotelManagementSystem
                         break;
 
                     case "3"://Book a Room for a Guest
+                        BookRoomForGuest(rooms,guests);
                         break;
 
                     case "4"://Search & Filter Rooms
