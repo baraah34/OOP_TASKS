@@ -190,6 +190,7 @@ namespace HotelManagementSystem
             Console.Write("Enter guest ID: ");
             string guestId = Console.ReadLine();
 
+            // Find the guest by guest ID
             Guest guest = guests.FirstOrDefault(g => g.guestId == guestId);
 
             if (guest == null)
@@ -199,14 +200,9 @@ namespace HotelManagementSystem
             }
 
             Console.Write("Enter desired room number: ");
-            int roomNumber;
+            int roomNumber = int.Parse(Console.ReadLine());
 
-            if (!int.TryParse(Console.ReadLine(), out roomNumber))
-            {
-                Console.WriteLine("Invalid room number.");
-                return;
-            }
-
+            // Find the room by room number
             Room room = rooms.FirstOrDefault(r => r.roomNumber == roomNumber);
 
             if (room == null)
@@ -221,7 +217,10 @@ namespace HotelManagementSystem
                 return;
             }
 
+            // Assign the room to the guest
             guest.roomNumber = room.roomNumber.ToString();
+
+            //  the room unavailable because it is now booked
             room.isAvailable = false;
 
             Console.WriteLine("\nBooking confirmed!");
@@ -232,7 +231,6 @@ namespace HotelManagementSystem
             Console.WriteLine("Total Nights: " + guest.totalNights);
             Console.WriteLine("Total Cost: " + guest.calculateCost(rooms).ToString("F2") + " OMR");
         }
-
         static void Main(string[] args)
         {
 
