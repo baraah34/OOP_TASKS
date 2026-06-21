@@ -339,10 +339,66 @@ namespace HotelManagementSystem
                 }
             }
 
+        //CASE 5 
+        static void GuestAndBookingStatistics(List<Room> rooms, List<Guest> guests)
+        {
+            Console.Clear();
+            Console.WriteLine("---- Guest & Booking Statistics ----");
+
+            //roomNumber is not 'Not Assigned' (Count with Where condition)
+            // list  contain only guests who have active booking
+            var bookedGuests = guests .Where(g => g.roomNumber != "Not Assigned").ToList();
 
 
-            static void Main(string[] args)
+            //Display total registered guests (Count on guests list) 
+            Console.WriteLine("Total Registered Guests: " + guests.Count());
+            Console.WriteLine("");
+
+            Console.WriteLine("Guests With Active Booking: " + bookedGuests.Count());
+            Console.WriteLine("");
+
+            Console.WriteLine("Total Rooms: " + rooms.Count());
+            Console.WriteLine("");
+
+            Console.WriteLine("Currently Booked Rooms: " + rooms.Count(r => r.isAvailable == false));
+            Console.WriteLine("");
+
+
+            if (bookedGuests.Count==0)
+
             {
+                Console.WriteLine("No active bookings recorded.");
+                return;
+            }
+
+            Console.WriteLine("Average Number of Nights: " + bookedGuests.Average(g => g.totalNights));
+
+
+            // Display the top 3 highest-spending guests by total cost. Use OrderByDescending on calculateTotalCost() result and
+           // Take(3).Show guest name, room number, and total cost for each.
+                        Console.WriteLine("Top 3 Highest-Spending Guests:");
+
+            
+            var topGuests = bookedGuests.OrderByDescending(g => g.calculateCost(rooms)).Take(3).ToList();
+                
+            topGuests.ForEach(g => Console.WriteLine(g.guestName + " | Room " + g.roomNumber + " | " +  g.calculateCost(rooms)));
+
+            Console.WriteLine("");
+         
+            // Using Select, produce a summary line per booked guest in the format: 'GuestName — Room RoomNumber — X nights
+            // — OMR Y.YY' and display them all.
+            Console.WriteLine("Booked Guest Summary:");
+
+            var summaries = bookedGuests.Select(g => g.guestName + " — Room " + g.roomNumber + " — " +  g.totalNights + " nights — OMR " +   g.calculateCost(rooms).ToString("F2")).ToList();    
+                    
+            summaries.ForEach(Console.WriteLine);
+        }
+
+
+
+        static void Main(string[] args)
+            {
+
             Console.ForegroundColor = ConsoleColor.Magenta;
 
             List<Room> rooms = new List<Room>();
@@ -399,6 +455,7 @@ namespace HotelManagementSystem
                             break;
 
                         case "5":// Guest & Booking Statistics
+                        GuestAndBookingStatistics(rooms, guests);
                             break;
 
                         case "6"://Check Out a Guest
