@@ -31,7 +31,7 @@ namespace HotelManagementSystem
             Console.WriteLine("Room Type: " + roomType);
             Console.WriteLine("Price Per Night: " + pricePerNight.ToString("F2") + " OMR");
             Console.WriteLine("Available: " + isAvailable);
-         
+
         }
     }
 
@@ -68,7 +68,7 @@ namespace HotelManagementSystem
         {
             //SEARCH INSIDE THE ROOM LIST TO FIND THE ROOM BOOKED BY  GUEST
 
-           // FOR EACH ROOM r, CHECK IF THE ROOM NUMBER EQUALES  GUEST ROOM NUMBER
+            // FOR EACH ROOM r, CHECK IF THE ROOM NUMBER EQUALES  GUEST ROOM NUMBER
             Room room = rooms.FirstOrDefault(r => r.roomNumber.ToString() == roomNumber);  //FirstOrDefault =>FIND THE FIRST ROOM THAT MATCH THE CONDITION
 
             if (room == null)
@@ -88,11 +88,13 @@ namespace HotelManagementSystem
     internal class Program
 
     {
+
+
         //CASE 1 FUNCTION
         static void AddNewRoom(List<Room> rooms)
         {
             Console.Clear();
-            Console.WriteLine("===== Add New Room =====");
+            Console.WriteLine("---- Add New Room ----");
 
             Console.Write("Enter room number: ");
             int roomNumber = int.Parse(Console.ReadLine());
@@ -106,7 +108,7 @@ namespace HotelManagementSystem
             }
 
             // Before adding, check whether a room with the same room number already exists in the rooms list. If it does, display an
-           // error and return to the menu without adding.
+            // error and return to the menu without adding.
             if (rooms.Any(r => r.roomNumber == roomNumber))
             {
                 Console.WriteLine("Error: Room number already exists.");
@@ -125,7 +127,7 @@ namespace HotelManagementSystem
                 return;
             }
             // If the room number is unique, create a new Room object and add it to the rooms list. The room is always available when first added
-          Room AddNewRoom = new Room(roomNumber, roomType, pricePerNight, true);
+            Room AddNewRoom = new Room(roomNumber, roomType, pricePerNight, true);
             rooms.Add(AddNewRoom);
 
             Console.WriteLine("\nRoom added successfully!");
@@ -140,7 +142,7 @@ namespace HotelManagementSystem
         static void RegisterNewGuest(List<Guest> guests)
         {
             Console.Clear();
-            Console.WriteLine("===== Register New Guest =====");
+            Console.WriteLine("---- Register New Guest ----");
 
             Console.Write("Enter guest name: ");
             string guestName = Console.ReadLine();
@@ -164,7 +166,7 @@ namespace HotelManagementSystem
             string guestId = "G" + (guests.Count + 1).ToString("D3");
 
 
-           // Create a new Guest object with roomNumber set to a default value of 'Not Assigned', then add it to the guests list:
+            // Create a new Guest object with roomNumber set to a default value of 'Not Assigned', then add it to the guests list:
 
             Guest newGuest = new Guest(guestId, guestName, "Not Assigned", checkInDate, totalNights);
 
@@ -185,7 +187,7 @@ namespace HotelManagementSystem
         static void BookRoomForGuest(List<Room> rooms, List<Guest> guests)
         {
             Console.Clear();
-            Console.WriteLine("===== Book a Room for a Guest =====");
+            Console.WriteLine("--- Book a Room for a Guest---- ");
 
             Console.Write("Enter guest ID: ");
             string guestId = Console.ReadLine();
@@ -231,85 +233,196 @@ namespace HotelManagementSystem
             Console.WriteLine("Total Nights: " + guest.totalNights);
             Console.WriteLine("Total Cost: " + guest.calculateCost(rooms).ToString("F2") + " OMR");
         }
-        static void Main(string[] args)
-        {
 
-            List<Room> rooms = new List<Room>();
+            //CASE 4
 
-            List<Guest> guests = new List<Guest>();
-
-            rooms.Add(new Room(111, "Single", 26.00, true));
-            rooms.Add(new Room(112, "Double", 42.00, true));
-            rooms.Add(new Room(113, "Suite", 88.00, true));
-            rooms.Add(new Room(114, "Single", 35.00, true));
-            rooms.Add(new Room(115, "Double", 50.00, true));
-            rooms.Add(new Room(116, "Suite", 150.00, true));
-
-
-            bool choice = true;
-
-            while (choice)
+            static void SearchAndFilterRooms(List<Room> rooms)
             {
                 Console.Clear();
 
-                Console.WriteLine("================================================");
-                Console.WriteLine("GRAND VISTA HOTEL — MANAGEMENT SYSTEM");
-                Console.WriteLine("================================================");
-                Console.WriteLine("1. Add New Room");
-                Console.WriteLine("2. Register New Guest");
-                Console.WriteLine("3. Book a Room for a Guest");
-                Console.WriteLine("4. Search & Filter Rooms");
-                Console.WriteLine("5. Guest & Booking Statistics");
-                Console.WriteLine("6. Check Out a Guest");
-                Console.WriteLine("7. Remove Unavailable Rooms");
-                Console.WriteLine("0. Exit");
-                Console.WriteLine("================================================");
+                Console.WriteLine("----Search & Filter Rooms---- ");
+                Console.WriteLine("1. Show all available rooms");
+                Console.WriteLine("2. Filter by room type");
+                Console.WriteLine("3. Filter by max price");
+                Console.WriteLine("4. Room price statistics");
+                Console.WriteLine("0. Back");
                 Console.Write("Enter your choice: ");
 
-                string choices = Console.ReadLine();
+                string choice = Console.ReadLine();
 
-                switch (choices)
+                //retrieve all rooms where isavailable is true using Where(), sorted by price ascending with OrderBy(). Display count of results:
+
+                if (choice == "1")
                 {
-                    case "1":// Add New Room
-                        AddNewRoom(rooms);
-                        break;
+                    var availableRooms = rooms.Where(r => r.isAvailable == true).OrderBy(r => r.pricePerNight).ToList();
 
-                    case "2"://Register New Guest
-                        RegisterNewGuest(guests);
-                        break;
+                    Console.WriteLine("Available Rooms Count: " + availableRooms.Count);
 
-                    case "3"://Book a Room for a Guest
-                        BookRoomForGuest(rooms,guests);
-                        break;
-
-                    case "4"://Search & Filter Rooms
-                        break;
-
-                    case "5":// Guest & Booking Statistics
-                        break;
-
-                    case "6"://Check Out a Guest
-                        break;
-
-                    case "7"://Remove Unavailable Rooms
-                        break;
-
-                    case "0":
-                        choice = false;
-                        Console.WriteLine("Exit system.");
-                        break;
-
-                    default:
-                        Console.WriteLine("Invalid choice.");
-                        break;
+                    if (availableRooms.Count == 0)
+                    {
+                        Console.WriteLine("No rooms found.");
+                    }
+                    else
+                    {
+                        //DISPLAY ALL ROOM
+                        availableRooms.ForEach(r => r.displayRoom());
+                    }
                 }
 
-                if (choice)
+                // Option 2: prompt for a room type, then use Where() to retrieve all rooms of that type regardless of availability. Display count and results:
+
+                else if (choice == "2")
                 {
-                    Console.WriteLine("\nPress any key to continue...");
-                    Console.ReadKey();
+                    Console.Write("Enter room type: ");
+                    string type = Console.ReadLine();
+
+                    var roomsTypes = rooms.Where(r => r.roomType.ToLower() == type.ToLower()).ToList();
+
+
+
+                    Console.WriteLine("Rooms Count: " + roomsTypes.Count);
+
+                    if (roomsTypes.Count == 0)
+                    {
+                        Console.WriteLine("No rooms found.");
+                    }
+                    else
+                    {
+                        //DSIPLAY ALL ROOMS
+                        roomsTypes.ForEach(r => r.displayRoom());
+                    }
+                }
+
+                //Option 3: prompt for a maximum price, then use Where() to retrieve available rooms at or below that price, sorted ascending.Display count:
+
+                else if (choice == "3")
+                {
+                    Console.Write("Enter maximum price: ");
+                    double maxPrice = double.Parse(Console.ReadLine());
+
+                    //Get rooms that are available and price is less than or equal to the max price:
+                    var roomsByPrice = rooms.Where(r => r.isAvailable == true && r.pricePerNight <= maxPrice).OrderBy(r => r.pricePerNight).ToList();
+
+                    Console.WriteLine("Rooms Count: " + roomsByPrice.Count);
+
+                    if (roomsByPrice.Count == 0)
+                    {
+                        Console.WriteLine("No rooms found.");
+                    }
+                    else
+                    {
+                        roomsByPrice.ForEach(r => r.displayRoom());
+                    }
+                }
+
+                // Option 4: use LINQ aggregation on the rooms list to display — total rooms (Count), available rooms (Count with
+                //condition), average price(Average), cheapest price(Min), most expensive price(Max)
+                else if (choice == "4")
+                {
+                    Console.WriteLine("---- Room Price Statistics ----");
+
+                    Console.WriteLine("Total Rooms: " + rooms.Count);
+                    Console.WriteLine("Available Rooms: " + rooms.Count(r => r.isAvailable == true));
+                    Console.WriteLine("Average Price: " + rooms.Average(r => r.pricePerNight));
+                    Console.WriteLine("Cheapest Price: " + rooms.Min(r => r.pricePerNight));
+                    Console.WriteLine("Most Expensive Price: " + rooms.Max(r => r.pricePerNight));
+                }
+
+                else if (choice == "0")
+                {
+                    return;
+                }
+
+                else
+                {
+                    Console.WriteLine("Invalid choice.");
+                }
+            }
+
+
+
+            static void Main(string[] args)
+            {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+
+            List<Room> rooms = new List<Room>();
+
+                List<Guest> guests = new List<Guest>();
+
+                rooms.Add(new Room(111, "Single", 26.00, true));
+                rooms.Add(new Room(112, "Double", 42.00, true));
+                rooms.Add(new Room(113, "Suite", 88.00, true));
+                rooms.Add(new Room(114, "Single", 35.00, true));
+                rooms.Add(new Room(115, "Double", 50.00, true));
+                rooms.Add(new Room(116, "Suite", 150.00, true));
+
+
+                bool choice = true;
+
+                while (choice)
+                {
+                    Console.Clear();
+
+                    Console.WriteLine("================================================");
+                    Console.WriteLine("GRAND VISTA HOTEL — MANAGEMENT SYSTEM");
+                    Console.WriteLine("================================================");
+                    Console.WriteLine("1. Add New Room");
+                    Console.WriteLine("2. Register New Guest");
+                    Console.WriteLine("3. Book a Room for a Guest");
+                    Console.WriteLine("4. Search & Filter Rooms");
+                    Console.WriteLine("5. Guest & Booking Statistics");
+                    Console.WriteLine("6. Check Out a Guest");
+                    Console.WriteLine("7. Remove Unavailable Rooms");
+                    Console.WriteLine("0. Exit");
+                    Console.WriteLine("================================================");
+                    Console.Write("Enter your choice: ");
+
+                    string choices = Console.ReadLine();
+
+                    switch (choices)
+                    {
+                        case "1":// Add New Room
+                            AddNewRoom(rooms);
+                            break;
+
+                        case "2"://Register New Guest
+                            RegisterNewGuest(guests);
+                            break;
+
+                        case "3"://Book a Room for a Guest
+                            BookRoomForGuest(rooms, guests);
+                            break;
+
+                        case "4"://Search & Filter Rooms
+                            SearchAndFilterRooms(rooms);
+
+                            break;
+
+                        case "5":// Guest & Booking Statistics
+                            break;
+
+                        case "6"://Check Out a Guest
+                            break;
+
+                        case "7"://Remove Unavailable Rooms
+                            break;
+
+                        case "0":
+                            choice = false;
+                            Console.WriteLine("Exit system.");
+                            break;
+
+                        default:
+                            Console.WriteLine("Invalid choice.");
+                            break;
+                    }
+
+                    if (choice)
+                    {
+                        Console.WriteLine("\nPress any key to continue...");
+                        Console.ReadKey();
+                    }
                 }
             }
         }
     }
-}
